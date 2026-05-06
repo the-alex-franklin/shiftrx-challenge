@@ -1,6 +1,8 @@
 {
   "tasks": {
     "start": "deno run -A --watch main.ts",
+    "test": "deno test --allow-env --allow-read agent/runner.test.ts",
+    "eval": "deno run --allow-env --allow-net --allow-read evals/run.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "deno run --allow-net --allow-env --allow-read db/seed.ts"

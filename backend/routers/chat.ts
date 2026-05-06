@@ -4,7 +4,8 @@ import { db } from "../db/client.ts";
 import { messages } from "../db/schema.ts";
 import { asc } from "drizzle-orm";
 import { env_vars } from "../env.ts";
-import { runHolly, toOpenAIMessages } from "../agent/runner.ts";
+import { runHolly } from "../agent/runner.ts";
+import { toOpenAIMessages } from "../agent/messages.ts";
 
 const chatRouter = new Hono();
 const openai = new OpenAI({ apiKey: env_vars.OPENAI_API_KEY });

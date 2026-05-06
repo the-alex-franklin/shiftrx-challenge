@@ -3,7 +3,9 @@
   "specifiers": {
     "jsr:@2or3godzillas/utils@~0.1.9": "0.1.9",
     "jsr:@hono/hono@^4.12.18": "4.12.18",
+    "jsr:@std/assert@*": "1.0.11",
     "jsr:@std/dotenv@*": "0.225.6",
+    "jsr:@std/internal@^1.0.5": "1.0.12",
     "npm:@types/pg@^8.20.0": "8.20.0",
     "npm:date-fns@*": "4.1.0",
     "npm:date-fns@^4.1.0": "4.1.0",
@@ -21,8 +23,17 @@
     "@hono/hono@4.12.18": {
       "integrity": "854fd0628abd7703a1583807f1ae8f99399604b9452b6a2a777fd3e097977b8c"
     },
+    "@std/assert@1.0.11": {
+      "integrity": "2461ef3c368fe88bc60e186e7744a93112f16fd110022e113a0849e94d1c83c1",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
+    },
     "@std/dotenv@0.225.6": {
       "integrity": "1d6f9db72f565bd26790fa034c26e45ecb260b5245417be76c2279e5734c421b"
+    },
+    "@std/internal@1.0.12": {
+      "integrity": "972a634fd5bc34b242024402972cd5143eac68d8dffaca5eaa4dba30ce17b027"
     }
   },
   "npm": {

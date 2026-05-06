@@ -5,53 +5,7 @@ import { asc } from "drizzle-orm";
 import { getHollySystem } from "./holly.ts";
 import { TOOLS } from "./tools.ts";
 import { executeTool } from "./tool-handlers.ts";
-
-type MessageRow = typeof messages.$inferSelect;
-
-export function toOpenAIMessages(
-  rows: MessageRow[],
-): OpenAI.Chat.Completions.ChatCompletionMessageParam[] {
-  const result: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [];
-  let i = 0;
-
-  while (i < rows.length) {
-    const row = rows[i];
-
-    if (row.role === "assistant" && row.toolCallId) {
-      const toolCalls: OpenAI.Chat.Completions.ChatCompletionMessageToolCall[] =
-        [];
-      while (
-        i < rows.length && rows[i].role === "assistant" && rows[i].toolCallId
-      ) {
-        toolCalls.push({
-          id: rows[i].toolCallId!,
-          type: "function",
-          function: {
-            name: rows[i].toolName!,
-            arguments: rows[i].content ?? "",
-          },
-        });
-        i++;
-      }
-      result.push({ role: "assistant", content: null, tool_calls: toolCalls });
-    } else if (row.role === "tool") {
-      result.push({
-        role: "tool",
-        tool_call_id: row.toolCallId!,
-        content: row.content ?? "",
-      });
-      i++;
-    } else {
-      result.push({
-        role: row.role as "user" | "assistant",
-        content: row.content ?? "",
-      });
-      i++;
-    }
-  }
-
-  return result;
-}
+import { toOpenAIMessages } from "./messages.ts";
 
 export async function runHolly(
   openai: OpenAI,
