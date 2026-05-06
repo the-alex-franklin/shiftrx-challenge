@@ -30,11 +30,11 @@ for (const r of results) {
   const icon = r.passed ? "✓" : "✗";
   console.log(`${icon}  ${r.scenario}`);
   if (!r.passed) {
-    console.log(`   expected tool : ${r.expectedTool}`);
-    console.log(`   got tool      : ${r.toolSelected}`);
-    if (r.error) console.log(`   error         : ${r.error}`);
+    console.log(`expected tool: ${r.expectedTool}`);
+    console.log(`got tool: ${r.toolSelected}`);
+    if (r.error) console.log(`error: ${r.error}`);
     if (r.response) {
-      console.log(`   response      : ${r.response.slice(0, 300)}`);
+      console.log(`response: ${r.response.slice(0, 300)}`);
     }
   }
   if (r.passed) passed++;
