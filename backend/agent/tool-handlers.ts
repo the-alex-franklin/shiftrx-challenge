@@ -1,6 +1,7 @@
 import { db } from "../db/client.ts";
 import { calloffs, providers, shifts } from "../db/schema.ts";
 import { and, eq, gte, lte, not } from "drizzle-orm";
+import { broadcast } from "../ws.ts";
 
 export async function executeTool(
   name: string,
@@ -41,6 +42,7 @@ export async function executeTool(
           .where(eq(shifts.id, args.shift_id))
           .returning();
         if (!result[0]) return JSON.stringify({ error: "Shift not found" });
+        broadcast({ type: "shifts_changed" });
         return JSON.stringify(result[0]);
       }
       case "report_calloff": {
@@ -52,6 +54,7 @@ export async function executeTool(
         await db.update(shifts)
           .set({ status: "uncovered" })
           .where(eq(shifts.id, args.shift_id));
+        broadcast({ type: "shifts_changed" });
         return JSON.stringify(calloff[0]);
       }
       case "create_shift": {
@@ -63,6 +66,7 @@ export async function executeTool(
           notes: args.notes,
           status: "scheduled",
         }).returning();
+        broadcast({ type: "shifts_changed" });
         return JSON.stringify(result[0]);
       }
       case "cancel_shift": {
@@ -71,6 +75,7 @@ export async function executeTool(
           .where(eq(shifts.id, args.shift_id))
           .returning();
         if (!result[0]) return JSON.stringify({ error: "Shift not found" });
+        broadcast({ type: "shifts_changed" });
         return JSON.stringify(result[0]);
       }
       default:

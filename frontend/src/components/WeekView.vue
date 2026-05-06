@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watchEffect } from 'vue';
+import { ref, computed, watchEffect, onMounted, onUnmounted } from 'vue';
 import { addDays, format, isToday } from 'date-fns';
 import ShiftCard from './ShiftCard.vue';
 
@@ -22,11 +22,28 @@ type Shift = {
 
 const shifts = ref<Shift[]>([]);
 
-watchEffect(async () => {
+async function fetchShifts() {
   const start = props.weekStart.toISOString();
   const end = addDays(props.weekStart, 7).toISOString();
   const res = await fetch(`/api/shifts?start=${start}&end=${end}`);
   shifts.value = await res.json();
+}
+
+watchEffect(fetchShifts);
+
+let ws: WebSocket | null = null;
+
+onMounted(() => {
+  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+  ws = new WebSocket(`${proto}://${location.host}/api/ws`);
+  ws.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    if (msg.type === 'shifts_changed') fetchShifts();
+  };
+});
+
+onUnmounted(() => {
+  ws?.close();
 });
 
 const days = computed(() => {
