@@ -1,35 +1,54 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import { addDays, format, isToday } from 'date-fns';
 import ShiftCard from './ShiftCard.vue';
 
 const props = defineProps<{ weekStart: Date }>();
 
-// AI generated seed/placeholder data
-const SEED_SHIFTS = [
-  { id: '1', providerName: 'Dr. Okafor', role: 'Physician', startTime: '07:00', endTime: '15:00', status: 'scheduled', dayOffset: 0 },
-  { id: '2', providerName: 'N. Reyes', role: 'Nurse', startTime: '07:00', endTime: '19:00', status: 'scheduled', dayOffset: 0 },
-  { id: '3', providerName: 'T. Lindqvist', role: 'Tech', startTime: '15:00', endTime: '23:00', status: 'scheduled', dayOffset: 0 },
-  { id: '4', providerName: 'Dr. Okafor', role: 'Physician', startTime: '07:00', endTime: '15:00', status: 'scheduled', dayOffset: 1 },
-  { id: '5', providerName: 'M. Chen', role: 'Nurse', startTime: '11:00', endTime: '23:00', status: 'cancelled', dayOffset: 1 },
-  { id: '6', providerName: 'Dr. Patel', role: 'Physician', startTime: '15:00', endTime: '23:00', status: 'scheduled', dayOffset: 2 },
-  { id: '7', providerName: 'N. Reyes', role: 'Nurse', startTime: '07:00', endTime: '19:00', status: 'scheduled', dayOffset: 2 },
-  { id: '8', providerName: 'T. Lindqvist', role: 'Tech', startTime: '07:00', endTime: '15:00', status: 'scheduled', dayOffset: 3 },
-  { id: '9', providerName: 'Dr. Russo', role: 'Physician', startTime: '07:00', endTime: '19:00', status: 'uncovered', dayOffset: 3 },
-  { id: '10', providerName: 'M. Chen', role: 'Nurse', startTime: '07:00', endTime: '15:00', status: 'scheduled', dayOffset: 4 },
-  { id: '11', providerName: 'Dr. Patel', role: 'Physician', startTime: '15:00', endTime: '23:00', status: 'scheduled', dayOffset: 4 },
-];
+type Provider = {
+  id: string;
+  name: string;
+  role: string;
+}
+
+type Shift = {
+  id: string;
+  startTime: string;
+  endTime: string;
+  role: string;
+  status: 'scheduled' | 'cancelled' | 'uncovered' | 'filled';
+  provider: Provider;
+}
+
+const shifts = ref<Shift[]>([]);
+
+watchEffect(async () => {
+  const start = props.weekStart.toISOString();
+  const end = addDays(props.weekStart, 7).toISOString();
+  const res = await fetch(`/api/shifts?start=${start}&end=${end}`);
+  shifts.value = await res.json();
+});
 
 const days = computed(() => {
   return Array.from({ length: 7 }, (_, i) => {
     const date = addDays(props.weekStart, i);
+    const iso = format(date, 'yyyy-MM-dd');
     return {
-      iso: format(date, 'yyyy-MM-dd'),
+      iso,
       name: format(date, 'EEE'),
       date: format(date, 'MMM d'),
       isToday: isToday(date),
-      shifts: SEED_SHIFTS.filter(s => s.dayOffset === i),
-    }
+      shifts: shifts.value
+        .filter(s => format(new Date(s.startTime), 'yyyy-MM-dd') === iso)
+        .map(s => ({
+          id: s.id,
+          providerName: s.provider.name,
+          role: s.role,
+          startTime: format(new Date(s.startTime), 'HH:mm'),
+          endTime: format(new Date(s.endTime), 'HH:mm'),
+          status: s.status,
+        })),
+    };
   });
 });
 </script>

@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { boolean, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const providers = pgTable("providers", {
@@ -19,6 +20,17 @@ export const shifts = pgTable("shifts", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
+export const providersRelations = relations(providers, ({ many }) => ({
+  shifts: many(shifts),
+}));
+
+export const shiftsRelations = relations(shifts, ({ one }) => ({
+  provider: one(providers, {
+    fields: [shifts.providerId],
+    references: [providers.id],
+  }),
+}));
+
 export const calloffs = pgTable("calloffs", {
   id: uuid("id").primaryKey().defaultRandom(),
   shiftId: uuid("shift_id").references(() => shifts.id),
@@ -32,7 +44,6 @@ export const calloffs = pgTable("calloffs", {
 
 export const messages = pgTable("messages", {
   id: uuid("id").primaryKey().defaultRandom(),
-  sessionId: text("session_id").notNull(),
   role: text("role").notNull(),
   content: text("content"),
   toolCallId: text("tool_call_id"),
