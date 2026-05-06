@@ -46,7 +46,7 @@ await db.insert(shifts).values([
   shift(patel, 2, 15, 23),
   shift(reyes, 2, 7, 19),
   shift(lindqvist, 3, 7, 15),
-  shift(russo, 3, 7, 19, "uncovered"),
+  shift(russo, 3, 7, 19, "cancelled"),
   shift(chen, 4, 7, 15),
   shift(patel, 4, 15, 23),
 ]);

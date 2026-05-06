@@ -22,7 +22,7 @@ export const TOOLS: OpenAI.Chat.Completions.ChatCompletionTool[] = [
     function: {
       name: "get_coverage_candidates",
       description:
-        "Get providers who could cover an uncovered shift — same role, different provider",
+        "Get providers who could cover an cancelled shift — same role, different provider",
       parameters: {
         type: "object",
         properties: {
@@ -39,7 +39,8 @@ export const TOOLS: OpenAI.Chat.Completions.ChatCompletionTool[] = [
     type: "function",
     function: {
       name: "assign_provider",
-      description: "Assign a provider to cover a shift, marking it as filled",
+      description:
+        "Assign a provider to cover a shift, marking it as scheduled",
       parameters: {
         type: "object",
         properties: {
@@ -58,7 +59,7 @@ export const TOOLS: OpenAI.Chat.Completions.ChatCompletionTool[] = [
     function: {
       name: "report_calloff",
       description:
-        "Report that a provider is calling off a shift, marking it as uncovered",
+        "Report that a provider is calling off a shift, marking it as cancelled",
       parameters: {
         type: "object",
         properties: {

@@ -38,7 +38,7 @@ export async function executeTool(
       }
       case "assign_provider": {
         const result = await db.update(shifts)
-          .set({ providerId: args.provider_id, status: "filled" })
+          .set({ providerId: args.provider_id, status: "scheduled" })
           .where(eq(shifts.id, args.shift_id))
           .returning();
         if (!result[0]) return JSON.stringify({ error: "Shift not found" });
@@ -52,7 +52,7 @@ export async function executeTool(
           reason: args.reason,
         }).returning();
         await db.update(shifts)
-          .set({ status: "uncovered" })
+          .set({ status: "cancelled" })
           .where(eq(shifts.id, args.shift_id));
         broadcast({ type: "shifts_changed" });
         return JSON.stringify(calloff[0]);

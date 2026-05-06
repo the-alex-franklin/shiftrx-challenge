@@ -33,7 +33,7 @@ export const SCENARIOS: Scenario[] = [
       reportedAt: "2026-05-06T08:00:00Z",
       resolved: false,
     }),
-    expectResponseToMatch: /call.?off|recorded|uncovered|coverage/i,
+    expectResponseToMatch: /call.?off|recorded|cancelled|coverage/i,
   },
   {
     name: "find coverage candidates",
@@ -62,12 +62,12 @@ export const SCENARIOS: Scenario[] = [
     mockToolResponse: JSON.stringify({
       id: SHIFT_ID,
       providerId: PROVIDER_ID,
-      status: "filled",
+      status: "scheduled",
       role: "RN",
       startTime: "2026-05-06T07:00:00Z",
       endTime: "2026-05-06T19:00:00Z",
     }),
-    expectResponseToMatch: /assigned|filled|confirmed/i,
+    expectResponseToMatch: /assigned|scheduled|confirmed/i,
   },
   {
     name: "create a new shift",

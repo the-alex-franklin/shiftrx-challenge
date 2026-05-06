@@ -6,22 +6,18 @@ defineProps<{
     role: string
     startTime: string
     endTime: string
-    status: 'scheduled' | 'cancelled' | 'uncovered' | 'filled'
+    status: 'scheduled' | 'cancelled'
   }
 }>();
 
 const statusStyles: Record<string, string> = {
   scheduled: 'border-slate-600 bg-slate-800',
-  cancelled: 'border-slate-700 bg-slate-800 opacity-50',
-  uncovered: 'border-red-800 bg-red-950',
-  filled: 'border-green-800 bg-green-950',
+  cancelled: 'border-red-800 bg-red-950',
 };
 
 const statusBadgeStyles: Record<string, string> = {
   scheduled: 'text-green-400',
-  cancelled: 'text-slate-500 line-through',
-  uncovered: 'text-red-400',
-  filled: 'text-green-400',
+  cancelled: 'text-red-400',
 };
 </script>
 

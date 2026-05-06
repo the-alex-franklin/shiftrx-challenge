@@ -85,7 +85,7 @@ shiftsRouter.post("/:id/calloff", async (c) => {
 
   const statusResult = await Try(async () =>
     await db.update(shifts)
-      .set({ status: "uncovered" })
+      .set({ status: "cancelled" })
       .where(eq(shifts.id, id))
       .returning()
   );
@@ -140,7 +140,7 @@ shiftsRouter.post("/:id/assign", async (c) => {
 
   const result = await Try(async () =>
     await db.update(shifts)
-      .set({ providerId, status: "filled" })
+      .set({ providerId, status: "scheduled" })
       .where(eq(shifts.id, id))
       .returning()
   );

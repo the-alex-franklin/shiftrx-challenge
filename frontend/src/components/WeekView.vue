@@ -16,7 +16,7 @@ type Shift = {
   startTime: string;
   endTime: string;
   role: string;
-  status: 'scheduled' | 'cancelled' | 'uncovered' | 'filled';
+  status: 'scheduled' | 'cancelled';
   provider: Provider;
 }
 
