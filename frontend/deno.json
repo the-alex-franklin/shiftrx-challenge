@@ -5,13 +5,17 @@
     "preview": "deno run -A --node-modules-dir npm:vite preview",
     "serve": "deno run --allow-net --allow-read jsr:@std/http@1/file-server dist/"
   },
-  "nodeModulesDir": true,
+  "nodeModulesDir": "auto",
   "compilerOptions": {
     "lib": ["ES2023", "DOM"]
   },
   "imports": {
+    "virtual:uno.css": "virtual:uno.css",
     "@deno/vite-plugin": "npm:@deno/vite-plugin@^2.0.2",
+    "@unocss/preset-web-fonts": "npm:@unocss/preset-web-fonts@^66.6.8",
+    "@unocss/preset-wind4": "npm:@unocss/preset-wind4@^66.6.8",
     "@vitejs/plugin-vue": "npm:@vitejs/plugin-vue@^6.0.5",
+    "unocss": "npm:unocss@^66.6.8",
     "vite": "npm:vite@^8.0.3",
     "vue": "npm:vue@^3.5.32"
   }
