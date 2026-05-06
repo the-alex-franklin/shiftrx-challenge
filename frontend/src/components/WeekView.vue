@@ -42,7 +42,7 @@ const days = computed(() => {
         .filter(s => format(new Date(s.startTime), 'yyyy-MM-dd') === iso)
         .map(s => ({
           id: s.id,
-          providerName: s.provider.name,
+          providerName: s.provider?.name ?? "Unassigned",
           role: s.role,
           startTime: format(new Date(s.startTime), 'HH:mm'),
           endTime: format(new Date(s.endTime), 'HH:mm'),

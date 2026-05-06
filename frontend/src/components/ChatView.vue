@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, nextTick } from 'vue';
+import { ref, nextTick, onMounted } from 'vue';
 
 type Message = {
   id: string
@@ -8,14 +8,7 @@ type Message = {
   time: string
 }
 
-const messages = ref<Message[]>([
-  {
-    id: '0',
-    role: 'assistant',
-    content: "How can I help you?",
-    time: getTime(),
-  }
-]);
+const messages = ref<Message[]>([]);
 
 const input = ref('');
 const isLoading = ref(false);
@@ -37,6 +30,30 @@ function autoResize() {
   inputEl.value.style.height = Math.min(inputEl.value.scrollHeight, 120) + 'px';
 }
 
+onMounted(async () => {
+  try {
+    const res = await fetch('/api/chat');
+    const history = await res.json();
+    const displayable = history.filter(
+      (m: { role: string; content: string | null; tool_calls?: unknown }) =>
+        (m.role === 'user' || m.role === 'assistant') && m.content && !m.tool_calls
+    );
+    if (displayable.length === 0) {
+      messages.value.push({ id: '0', role: 'assistant', content: 'How can I help you?', time: getTime() });
+    } else {
+      messages.value = displayable.map((m: { role: 'user' | 'assistant'; content: string }) => ({
+        id: crypto.randomUUID(),
+        role: m.role,
+        content: m.content,
+        time: getTime(),
+      }));
+    }
+  } catch {
+    messages.value.push({ id: '0', role: 'assistant', content: 'How can I help you?', time: getTime() });
+  }
+  await scrollToBottom();
+});
+
 async function send() {
   const text = input.value.trim();
   if (!text || isLoading.value) return;
@@ -54,7 +71,7 @@ async function send() {
       body: JSON.stringify({ message: text }),
     });
     const data = await res.json();
-    messages.value.push({ id: crypto.randomUUID(), role: 'assistant', content: data.reply, time: getTime() });
+    messages.value.push({ id: crypto.randomUUID(), role: 'assistant', content: data.message, time: getTime() });
   } catch {
     messages.value.push({ id: crypto.randomUUID(), role: 'assistant', content: 'Something went wrong. Try again.', time: getTime() });
   } finally {

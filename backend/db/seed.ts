@@ -1,7 +1,9 @@
 import { db } from "./client.ts";
-import { providers, shifts } from "./schema.ts";
+import { calloffs, messages, providers, shifts } from "./schema.ts";
 import { addDays, setHours, startOfWeek } from "date-fns";
 
+await db.delete(calloffs);
+await db.delete(messages);
 await db.delete(shifts);
 await db.delete(providers);
 
