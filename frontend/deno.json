@@ -10,6 +10,7 @@
     "lib": ["ES2023", "DOM"]
   },
   "imports": {
+    "date-fns": "npm:date-fns@^4.1.0",
     "virtual:uno.css": "virtual:uno.css",
     "@deno/vite-plugin": "npm:@deno/vite-plugin@^2.0.2",
     "@unocss/preset-web-fonts": "npm:@unocss/preset-web-fonts@^66.6.8",

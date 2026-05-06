@@ -5,6 +5,10 @@
     "npm:@unocss/preset-web-fonts@^66.6.8": "66.6.8",
     "npm:@unocss/preset-wind4@^66.6.8": "66.6.8",
     "npm:@vitejs/plugin-vue@^6.0.5": "6.0.6_vite@8.0.10_vue@3.5.34",
+    "npm:date-fns@^4.1.0": "4.1.0",
+    "npm:prettier-plugin-vue@^1.1.6": "1.1.6",
+    "npm:prettier@*": "3.8.3",
+    "npm:prettier@^3.8.3": "3.8.3",
     "npm:unocss@^66.6.8": "66.6.8_vite@8.0.10",
     "npm:vite@*": "8.0.10",
     "npm:vite@^8.0.3": "8.0.10",
@@ -633,6 +637,9 @@
     "csstype@3.2.3": {
       "integrity": "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ=="
     },
+    "date-fns@4.1.0": {
+      "integrity": "sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg=="
+    },
     "defu@6.1.7": {
       "integrity": "sha512-7z22QmUWiQ/2d0KkdYmANbRUVABpZ9SNYyH5vx6PZ+nE5bcC0l7uFvEfHlyld/HcGBFTL536ClDt3DEcSlEJAQ=="
     },
@@ -869,6 +876,20 @@
         "source-map-js"
       ]
     },
+    "prettier-plugin-vue@1.1.6": {
+      "integrity": "sha512-trQ/oY+6hSsGe2zPIFThXMIM0TbxMEbk2VOrKjwHWuSz7OEo0rnumbz9a47OxVPCaAnGY9vZG8qDTiTmk9bq0A==",
+      "dependencies": [
+        "prettier@2.8.8"
+      ]
+    },
+    "prettier@2.8.8": {
+      "integrity": "sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==",
+      "bin": true
+    },
+    "prettier@3.8.3": {
+      "integrity": "sha512-7igPTM53cGHMW8xWuVTydi2KO233VFiTNyF5hLJqpilHfmn8C8gPf+PS7dUT64YcXFbiMGZxS9pCSxL/Dxm/Jw==",
+      "bin": true
+    },
     "quansync@1.0.0": {
       "integrity": "sha512-5xZacEEufv3HSTPQuchrvV6soaiACMFnq1H8wkVioctoH3TRha9Sz66lOxRwPK/qZj7HPiSveih9yAyh98gvqA=="
     },
@@ -1026,6 +1047,9 @@
       "npm:@unocss/preset-web-fonts@^66.6.8",
       "npm:@unocss/preset-wind4@^66.6.8",
       "npm:@vitejs/plugin-vue@^6.0.5",
+      "npm:date-fns@^4.1.0",
+      "npm:prettier-plugin-vue@^1.1.6",
+      "npm:prettier@^3.8.3",
       "npm:unocss@^66.6.8",
       "npm:vite@^8.0.3",
       "npm:vue@^3.5.32"
