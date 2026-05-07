@@ -16,7 +16,7 @@ shiftsRouter.get("/", async (c) => {
     await db.query.shifts.findMany({
       where: and(
         gte(shifts.startTime, new Date(start)),
-        lte(shifts.startTime, new Date(end)),
+        lte(shifts.endTime, new Date(end)),
       ),
       with: { provider: true },
     })

@@ -68,7 +68,7 @@ async function send() {
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text }),
+      body: JSON.stringify({ message: text, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone }),
     });
     const data = await res.json();
     messages.value.push({ id: crypto.randomUUID(), role: 'assistant', content: data.message, time: getTime() });
@@ -100,7 +100,7 @@ async function send() {
         :class="msg.role === 'user' ? 'items-end' : 'items-start'"
       >
         <div
-          class="max-w-[85%] text-sm leading-relaxed px-3 py-2 rounded-sm"
+          class="max-w-[85%] text-sm leading-relaxed px-3 py-2 rounded-sm whitespace-pre-wrap"
           :class="msg.role === 'user'
             ? 'bg-slate-700 text-slate-100'
             : 'bg-slate-800 text-slate-200 border border-slate-700'"

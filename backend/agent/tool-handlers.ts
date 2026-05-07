@@ -3,9 +3,22 @@ import { calloffs, providers, shifts } from "../db/schema.ts";
 import { and, eq, gte, lte, not } from "drizzle-orm";
 import { broadcast } from "../ws.ts";
 
+function fmtLocal(date: Date, tz: string): string {
+  return date.toLocaleString("en-US", {
+    timeZone: tz,
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
 export async function executeTool(
   name: string,
   args: Record<string, string>,
+  timezone = "UTC",
 ): Promise<string> {
   try {
     switch (name) {
@@ -13,11 +26,15 @@ export async function executeTool(
         const result = await db.query.shifts.findMany({
           where: and(
             gte(shifts.startTime, new Date(args.start)),
-            lte(shifts.startTime, new Date(args.end)),
+            lte(shifts.endTime, new Date(args.end)),
           ),
           with: { provider: true },
         });
-        return JSON.stringify(result);
+        return JSON.stringify(result.map((s) => ({
+          ...s,
+          startTime: fmtLocal(s.startTime, timezone),
+          endTime: fmtLocal(s.endTime, timezone),
+        })));
       }
       case "get_coverage_candidates": {
         const shift = await db.query.shifts.findFirst({

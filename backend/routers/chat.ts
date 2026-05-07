@@ -18,10 +18,10 @@ chatRouter.get("/", async (c) => {
 });
 
 chatRouter.post("/", async (c) => {
-  const { message } = await c.req.json();
+  const { message, timezone } = await c.req.json();
   if (!message) return c.json({ error: "message is required" }, 400);
 
-  const reply = await runHolly(openai, message);
+  const reply = await runHolly(openai, message, timezone);
   return c.json({ message: reply });
 });
 

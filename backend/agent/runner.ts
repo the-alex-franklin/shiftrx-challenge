@@ -10,6 +10,7 @@ import { toOpenAIMessages } from "./messages.ts";
 export async function runHolly(
   openai: OpenAI,
   message: string,
+  timezone?: string,
 ): Promise<string> {
   await db.insert(messages).values({ role: "user", content: message });
 
@@ -20,7 +21,7 @@ export async function runHolly(
 
   let response = await openai.chat.completions.create({
     model: "gpt-4o",
-    messages: [getHollySystem(), ...await getHistory()],
+    messages: [getHollySystem(timezone), ...await getHistory()],
     tools: TOOLS,
   });
 
@@ -38,7 +39,7 @@ export async function runHolly(
 
     for (const call of toolCalls) {
       const args = JSON.parse(call.function.arguments);
-      const result = await executeTool(call.function.name, args);
+      const result = await executeTool(call.function.name, args, timezone);
       await db.insert(messages).values({
         role: "tool",
         toolCallId: call.id,
@@ -49,7 +50,7 @@ export async function runHolly(
 
     response = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [getHollySystem(), ...await getHistory()],
+      messages: [getHollySystem(timezone), ...await getHistory()],
       tools: TOOLS,
     });
   }

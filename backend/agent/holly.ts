@@ -1,9 +1,15 @@
 import OpenAI from "openai";
 
-export function getHollySystem(): OpenAI.Chat.Completions.ChatCompletionSystemMessageParam {
+export function getHollySystem(
+  timezone?: string,
+): OpenAI.Chat.Completions.ChatCompletionSystemMessageParam {
   const today = new Date();
-  const todayStr = today.toISOString().split("T")[0];
-  const dayOfWeek = today.toLocaleDateString("en-US", { weekday: "long" });
+  const tz = timezone ?? "UTC";
+  const todayStr = today.toLocaleDateString("en-CA", { timeZone: tz });
+  const dayOfWeek = today.toLocaleDateString("en-US", {
+    weekday: "long",
+    timeZone: tz,
+  });
 
   return {
     role: "system",
@@ -11,7 +17,7 @@ export function getHollySystem(): OpenAI.Chat.Completions.ChatCompletionSystemMe
       `You are Holly, an intelligent scheduling assistant for healthcare facilities.
 Your job is to help providers and administrators manage their shift schedules.
 
-Today is ${dayOfWeek}, ${todayStr}.
+Today is ${dayOfWeek}, ${todayStr}. The user's local timezone is ${tz} — all shift times in tool results are UTC, so convert them to ${tz} when reporting to the user.
 
 You have access to tools to view, create, and modify shifts, record call-offs, and find coverage.
 
@@ -22,7 +28,6 @@ Guidelines:
 - When a provider calls off, always use report_calloff first, then offer to find coverage
 - Only ask for clarification when you can't determine WHO or WHICH SHIFT — not when
 - Be warm but efficient
-- Never fabricate provider names, shift IDs, or schedule data — only report what tools return
-- If asked about something outside scheduling, politely decline`,
+- Never fabricate provider names, shift IDs, or schedule data — only report what tools return`,
   };
 }
